@@ -118,23 +118,28 @@ function getSettings(rawSettings, base) {
   const table2 = rawSettings.table2Id
     ? base.getTableByIdIfExists(rawSettings.table2Id)
     : null;
-  const field1 = table1
-    ? table1.getFieldByIdIfExists(rawSettings.field1Id)
-    : null;
-  const field11 = table1
-    ? table1.getFieldByIdIfExists(rawSettings.field11Id)
-    : null;
-  const field2 = table2
-    ? table2.getFieldByIdIfExists(rawSettings.field2Id)
-    : null;
-  const field22 = table1
-    ? table2.getFieldByIdIfExists(rawSettings.field22Id)
-    : null;
-  const queryResult = view
-    ? view.selectRecords({
-        fields: [table.primaryField, field.id, fieldType && fieldType.id],
-      })
-    : null;
+  const field1 =
+    table1 && rawSettings.field1Id
+      ? table1.getFieldByIdIfExists(rawSettings.field1Id)
+      : null;
+  const field11 =
+    table1 && rawSettings.field11Id
+      ? table1.getFieldByIdIfExists(rawSettings.field11Id)
+      : null;
+  const field2 =
+    table2 && rawSettings.field2Id
+      ? table2.getFieldByIdIfExists(rawSettings.field2Id)
+      : null;
+  const field22 =
+    table2 && rawSettings.field22Id
+      ? table2.getFieldByIdIfExists(rawSettings.field22Id)
+      : null;
+  const queryResult =
+    view && field
+      ? view.selectRecords({
+          fields: [table.primaryField, field.id, fieldType && fieldType.id],
+        })
+      : null;
 
   const queryResult1 =
     field11 && field1

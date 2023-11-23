@@ -58,15 +58,36 @@ function SettingsForm({
                 table={settings.table}
                 globalConfigKey={ConfigKeys.VIEW_ID}
               />
+              <h4
+                style={{
+                  marginBottom: "0",
+                  marginTop: "12px",
+                  color: "hsl(0, 0%, 46%)",
+                  fontWeight: "normal",
+                }}
+              >
+                Champ pour l'activité suivante
+              </h4>
               <FieldPickerSynced
                 table={settings.table}
                 globalConfigKey={ConfigKeys.FIELD_ID}
                 allowedTypes={allowedFieldTypes}
               />
+              <h4
+                style={{
+                  marginBottom: "0",
+                  marginTop: "12px",
+                  color: "hsl(0, 0%, 46%)",
+                  fontWeight: "normal",
+                }}
+              >
+                Champ pour le type d'activité
+              </h4>
               <FieldPickerSynced
                 table={settings.table}
                 globalConfigKey={ConfigKeys.FIELD_TYPE}
                 allowedTypes={allowedFieldTypes}
+                label="Champ pour le type d'activité"
               />
             </FormField>
 
