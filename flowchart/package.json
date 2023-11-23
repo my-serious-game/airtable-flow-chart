@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "lint": "eslint frontend"
+  },
+  "dependencies": {
+    "@airtable/blocks": "1.18.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-svg-pan-zoom": "3.12.1",
+    "react-dom": "^18.2.0",
+    "save-svg-as-png": "^1.4.17",
+    "workerize": "^0.1.8"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}
