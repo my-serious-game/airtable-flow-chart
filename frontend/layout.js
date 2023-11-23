@@ -116,193 +116,200 @@ export function createLayout(settings) {
   const nodes = [];
   const edges = [];
   let i = 0;
+  if (queryResult.records && queryResult.records.length > 0) {
+    for (const record of queryResult.records) {
+      const color = i === 0 ? "#CFA895" : "#63524A";
+      if (record.isDeleted) {
+        continue;
+      }
+      let displayText = record.name
+        .substring(0, 50)
+        .trim()
+        .replace(/"/g, '\\"');
+      if (record.name.length > 50) {
+        displayText += "...";
+      }
 
-  for (const record of queryResult.records) {
-    const color = i === 0 ? "#CFA895" : "#63524A";
-    if (record.isDeleted) {
-      continue;
-    }
-    let displayText = record.name.substring(0, 50).trim().replace(/"/g, '\\"');
-    if (record.name.length > 50) {
-      displayText += "...";
-    }
-
-    nodes.push(
-      `${record.id} [id="${record.id}" label="${displayText}"
+      nodes.push(
+        `${record.id} [id="${record.id}" label="${displayText}"
             tooltip="${displayText}"
             fontcolor="white"
             color="#B35047"
             fillcolor="#D65F55"]`
-    );
+      );
 
-    const recordLinked = queryResult1
-      ? queryResult1.filter(
-          (cell) =>
-            cell._data.cellValuesByFieldId &&
-            cell._data.cellValuesByFieldId[field1.id] &&
-            cell._data.cellValuesByFieldId[field1.id].find(
-              (l) => l.id === record.id
-            )
-        )
-      : null;
+      const recordLinked = queryResult1
+        ? queryResult1.filter(
+            (cell) =>
+              cell._data.cellValuesByFieldId &&
+              cell._data.cellValuesByFieldId[field1.id] &&
+              cell._data.cellValuesByFieldId[field1.id].find(
+                (l) => l.id === record.id
+              )
+          )
+        : null;
 
-    if (recordLinked && recordLinked.length > 0) {
-      for (const record1 of recordLinked) {
-        if (record1.isDeleted) {
-          continue;
-        }
+      if (recordLinked && recordLinked.length > 0) {
+        for (const record1 of recordLinked) {
+          if (record1.isDeleted) {
+            continue;
+          }
 
-        let displayText = record1.name
-          .substring(0, 50)
-          .trim()
-          .replace(/"/g, '\\"');
-        if (record1.name.length > 50) {
-          displayText += "...";
-        }
-        nodes.push(
-          `${record1.id} [id="${record1.id}" label="${displayText}"
+          let displayText = record1.name
+            .substring(0, 50)
+            .trim()
+            .replace(/"/g, '\\"');
+          if (record1.name.length > 50) {
+            displayText += "...";
+          }
+          nodes.push(
+            `${record1.id} [id="${record1.id}" label="${displayText}"
                           tooltip="Au clique - ${displayText}"
                           fontcolor="black"
                           color="#C2A291"
                           shape=diamond
                           fillcolor="#E5BFAB"]`
-        );
+          );
+          edges.push(
+            `${record.id} -> ${record1.id} [id="${record.id}->${record1.id}" color="#63524A"]`
+          );
+        }
+      }
+
+      const recordLinked2 = queryResult1
+        ? queryResult1.filter(
+            (cell) =>
+              cell._data.cellValuesByFieldId &&
+              cell._data.cellValuesByFieldId[field11.id] &&
+              cell._data.cellValuesByFieldId[field11.id].find(
+                (l) => l.id === record.id
+              )
+          )
+        : null;
+      if (recordLinked2 && recordLinked2.length > 0 && recordLinked2[0]) {
         edges.push(
-          `${record.id} -> ${record1.id} [id="${record.id}->${record1.id}" color="#63524A"]`
+          `${recordLinked2[0].id} -> ${record.id} [id="${recordLinked2[0].id}->${record.id}" color="${color}"]`
         );
       }
-    }
 
-    const recordLinked2 = queryResult1
-      ? queryResult1.filter(
-          (cell) =>
-            cell._data.cellValuesByFieldId &&
-            cell._data.cellValuesByFieldId[field11.id] &&
-            cell._data.cellValuesByFieldId[field11.id].find(
-              (l) => l.id === record.id
-            )
-        )
-      : null;
-    if (recordLinked2 && recordLinked2.length > 0 && recordLinked2[0]) {
-      edges.push(
-        `${recordLinked2[0].id} -> ${record.id} [id="${recordLinked2[0].id}->${record.id}" color="${color}"]`
-      );
-    }
+      const recordLinked3 = queryResult2
+        ? queryResult2.filter(
+            (cell) =>
+              cell._data.cellValuesByFieldId &&
+              cell._data.cellValuesByFieldId[field2.id] &&
+              cell._data.cellValuesByFieldId[field2.id]
+                .valuesByLinkedRecordId &&
+              cell._data.cellValuesByFieldId[field2.id].valuesByLinkedRecordId[
+                cell._data.cellValuesByFieldId[field2.id].linkedRecordIds[0]
+              ] &&
+              cell._data.cellValuesByFieldId[field2.id].valuesByLinkedRecordId[
+                cell._data.cellValuesByFieldId[field2.id].linkedRecordIds[0]
+              ].filter((f) => f.id === record.id).length > 0
+          )
+        : null;
 
-    const recordLinked3 = queryResult2
-      ? queryResult2.filter(
-          (cell) =>
-            cell._data.cellValuesByFieldId &&
-            cell._data.cellValuesByFieldId[field2.id] &&
-            cell._data.cellValuesByFieldId[field2.id].valuesByLinkedRecordId &&
-            cell._data.cellValuesByFieldId[field2.id].valuesByLinkedRecordId[
-              cell._data.cellValuesByFieldId[field2.id].linkedRecordIds[0]
-            ] &&
-            cell._data.cellValuesByFieldId[field2.id].valuesByLinkedRecordId[
-              cell._data.cellValuesByFieldId[field2.id].linkedRecordIds[0]
-            ].filter((f) => f.id === record.id).length > 0
-        )
-      : null;
-
-    if (recordLinked3 && recordLinked3.length > 0) {
-      for (const record3 of recordLinked3) {
-        let displayText = record3.name
-          .substring(0, 50)
-          .trim()
-          .replace(/"/g, '\\"');
-        if (record3.name.length > 50) {
-          displayText += "...";
-        }
-        nodes.push(
-          `${record3.id} [id="${record3.id}" label="${displayText}"
+      if (recordLinked3 && recordLinked3.length > 0) {
+        for (const record3 of recordLinked3) {
+          let displayText = record3.name
+            .substring(0, 50)
+            .trim()
+            .replace(/"/g, '\\"');
+          if (record3.name.length > 50) {
+            displayText += "...";
+          }
+          nodes.push(
+            `${record3.id} [id="${record3.id}" label="${displayText}"
                             tooltip="Feedback - ${displayText}"
                             fontcolor="black"
                             color="#968881" 
                             shape=diamond
                             fillcolor="#C99B85"]`
-        );
-        edges.push(
-          `${record.id} -> ${record3.id} [id="${record.id}->${record3.id}" color="#63524A"]`
-        );
+          );
+          edges.push(
+            `${record.id} -> ${record3.id} [id="${record.id}->${record3.id}" color="#63524A"]`
+          );
+        }
       }
+
+      const recordLinked4 = queryResult2
+        ? queryResult2.filter(
+            (cell) =>
+              cell._data.cellValuesByFieldId &&
+              cell._data.cellValuesByFieldId[field22.id] &&
+              cell._data.cellValuesByFieldId[field22.id].find(
+                (l) => l.id === record.id
+              )
+          )
+        : null;
+      if (recordLinked4 && recordLinked4.length > 0) {
+        let color = i === 0 ? "#CFA895" : "#63524A";
+        for (const r of recordLinked4) {
+          edges.push(
+            `${r.id} -> ${record.id} [id="${r.id}->${record.id}" color="${color}"]`
+          );
+        }
+      }
+
+      //linked inside same table
+      const linkedRecordCellValues = record.getCellValue(field.id) || [];
+
+      if (linkedRecordCellValues && linkedRecordCellValues.length > 0) {
+        for (const linkedRecordCellValue of linkedRecordCellValues) {
+          // The record might be in the cell value but not in the query result when it is deleted
+          const linkedRecord = queryResult.getRecordByIdIfExists(
+            linkedRecordCellValue.id
+          );
+          if (!linkedRecord || linkedRecord.isDeleted) {
+            continue;
+          }
+          const linkedIndex = queryResult.records.findIndex(
+            (r) => r.id === linkedRecord.id
+          );
+          let color2 = "#63524A";
+
+          if (linkedIndex !== -1 && i > linkedIndex) {
+            color2 = "#CFA895";
+          }
+
+          edges.push(
+            `${record.id} -> ${linkedRecord.id} [id="${record.id}->${linkedRecord.id}" color="${color2}"]`
+          );
+        }
+      }
+
+      // ajout du temps total du scénario
+      if (fieldType && record._data.cellValuesByFieldId[fieldType.id]) {
+        const mechanic = record._data.cellValuesByFieldId[fieldType.id].name;
+        switch (mechanic) {
+          case "DIALOG": {
+            totalTime += 15;
+            break;
+          }
+          case "POSITIONNEMENT": {
+            totalTime += 0;
+            break;
+          }
+          case "QUIZ": {
+            totalTime += 45;
+            break;
+          }
+          case "CLIQUE_PIECE": {
+            totalTime += 10;
+            break;
+          }
+          case "TRANSITION": {
+            totalTime += 5;
+            break;
+          }
+          default: {
+            totalTime += 0;
+            break;
+          }
+        }
+      }
+
+      i++;
     }
-
-    const recordLinked4 = queryResult2
-      ? queryResult2.filter(
-          (cell) =>
-            cell._data.cellValuesByFieldId &&
-            cell._data.cellValuesByFieldId[field22.id] &&
-            cell._data.cellValuesByFieldId[field22.id].find(
-              (l) => l.id === record.id
-            )
-        )
-      : null;
-    if (recordLinked4 && recordLinked4.length > 0) {
-      let color = i === 0 ? "#CFA895" : "#63524A";
-      for (const r of recordLinked4) {
-        edges.push(
-          `${r.id} -> ${record.id} [id="${r.id}->${record.id}" color="${color}"]`
-        );
-      }
-    }
-
-    //linked inside same table
-    const linkedRecordCellValues = record.getCellValue(field.id) || [];
-
-    for (const linkedRecordCellValue of linkedRecordCellValues) {
-      // The record might be in the cell value but not in the query result when it is deleted
-      const linkedRecord = queryResult.getRecordByIdIfExists(
-        linkedRecordCellValue.id
-      );
-      if (!linkedRecord || linkedRecord.isDeleted) {
-        continue;
-      }
-      const linkedIndex = queryResult.records.findIndex(
-        (r) => r.id === linkedRecord.id
-      );
-      let color2 = "#63524A";
-
-      if (linkedIndex !== -1 && i > linkedIndex) {
-        color2 = "#CFA895";
-      }
-
-      edges.push(
-        `${record.id} -> ${linkedRecord.id} [id="${record.id}->${linkedRecord.id}" color="${color2}"]`
-      );
-    }
-
-    // ajout du temps total du scénario
-    if (fieldType && record._data.cellValuesByFieldId[fieldType.id]) {
-      const mechanic = record._data.cellValuesByFieldId[fieldType.id].name;
-      switch (mechanic) {
-        case "DIALOG": {
-          totalTime += 15;
-          break;
-        }
-        case "POSITIONNEMENT": {
-          totalTime += 0;
-          break;
-        }
-        case "QUIZ": {
-          totalTime += 45;
-          break;
-        }
-        case "CLIQUE_PIECE": {
-          totalTime += 10;
-          break;
-        }
-        case "TRANSITION": {
-          totalTime += 5;
-          break;
-        }
-        default: {
-          totalTime += 0;
-          break;
-        }
-      }
-    }
-
-    i++;
   }
   source += `label="Temps Total: ${
     totalTime / 60
