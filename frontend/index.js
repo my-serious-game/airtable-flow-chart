@@ -18,7 +18,7 @@ import { useSettings } from "./settings";
 import SettingsForm from "./SettingsForm";
 
 // viz.js has a stack overflow when there are too many records. So add a limit to be safe.
-const MAX_RECORDS = 100;
+const MAX_RECORDS = 10000;
 export const ExportType = Object.freeze({
   PNG: "png",
   SVG: "svg",
